@@ -11,6 +11,27 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
+
+    <style>
+        #map {
+            height: calc(100vh - 56px);
+            margin-top: 56px;
+        }
+
+        @media (max-width: 1024px){
+            #map {
+                height: calc(100vh- 56px);
+                margin-top: 56px;
+            }
+        }
+
+        @media (max-width: 503px){
+            #map {
+                height: calc(100vh- 94px);
+                margin-top: 94px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -24,7 +45,9 @@
         </div>
         </nav>
 
-    <div id="map" style="height : calc(100vh - 56px); margin-top: 56px;"></div>
+    <div id="map"></div>
+    <!-- <div style="padding-top: 60px;"><h1>Hello</h1></div> -->
+    
     
     <script type ="module" src = "script.js"></script>
 
