@@ -1,4 +1,6 @@
 # Weather-Dashboard
+![ezgif com-gif-maker](https://github.com/pwilliamspeniel/Weather-Dashboard/assets/117294736/9c405821-5809-4000-904f-394802a8bf39)
+
 An interactive weather dashboard showcasing real-time weather data with geospatial analytics. Utilizes leaflet for map visualization, OpenWeather API for weather information, and provides a user-friendly interface to explore and understand current weather conditions. Built with HTML and JavaScript. Check out the deployed site: [Weather-Dashboard](https://pwilliamspeniel.github.io/Weather-Dashboard/)
 
 ## Overview
