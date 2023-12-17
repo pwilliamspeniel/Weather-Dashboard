@@ -1,10 +1,11 @@
 # Weather-Dashboard
+![ezgif com-speed](https://github.com/pwilliamspeniel/Weather-Dashboard/assets/117294736/72c6b17f-e165-4582-8b5f-d6e8ff7e653d)
 
 An interactive weather dashboard presenting real-time weather conditions and times in various cities. It utilizes Leaflet for map visualization, offering a user-friendly interface to explore and understand current weather and time data. Built with HTML, CSS and JavaScript. Explore the live dashboard:[Weather-Dashboard](https://pwilliamspeniel.github.io/Weather-Dashboard/)
 
 ## Overview
 
-This weather dashboard provides real-time weather data through the OpenWeather API. Additionally, it utilizes the World Time API for time-related information. To use this dashboard, you'll need to obtain API keys from [OpenWeather](https://openweathermap.org/api) and [World Time API](https://worldtimeapi.org/).
+This weather dashboard provides real-time weather data through the OpenWeather API. Additionally, it utilizes the World Time API for time-related information.
 
 ## Getting Started
 
