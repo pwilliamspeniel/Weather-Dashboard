@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
@@ -12,26 +13,8 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
 
-    <style>
-        #map {
-            height: calc(100vh - 56px);
-            margin-top: 56px;
-        }
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-        @media (max-width: 1024px){
-            #map {
-                height: calc(100vh- 56px);
-                margin-top: 56px;
-            }
-        }
-
-        @media (max-width: 503px){
-            #map {
-                height: calc(100vh- 94px);
-                margin-top: 94px;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -47,9 +30,10 @@
 
     <div id="map"></div>
     
-    <script type ="module" src = "script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <script src = "script.js"></script>
 
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 </html>
