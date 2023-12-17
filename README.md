@@ -1,32 +1,32 @@
 # Weather-Dashboard
-![ezgif com-crop](https://github.com/pwilliamspeniel/Weather-Dashboard/assets/117294736/1a79ed73-0259-4f01-a6f0-afc1c83a276a)
 
-An interactive weather dashboard showcasing real-time weather data with geospatial analytics. Utilizes leaflet for map visualization, OpenWeather API for weather information, and provides a user-friendly interface to explore and understand current weather conditions. Built with HTML and JavaScript. Check out the deployed site: [Weather-Dashboard](https://pwilliamspeniel.github.io/Weather-Dashboard/)
+An interactive weather dashboard presenting real-time weather conditions and times in various cities. It utilizes Leaflet for map visualization, offering a user-friendly interface to explore and understand current weather and time data. Built with HTML, CSS and JavaScript. Explore the live dashboard:[Weather-Dashboard](https://pwilliamspeniel.github.io/Weather-Dashboard/)
 
 ## Overview
 
-This weather dashboard provides real-time weather data through the OpenWeather API. To use this dashboard, you'll need to obtain your own API key from [OpenWeather](https://openweathermap.org/api).
+This weather dashboard provides real-time weather data through the OpenWeather API. Additionally, it utilizes the World Time API for time-related information. To use this dashboard, you'll need to obtain API keys from [OpenWeather](https://openweathermap.org/api) and [World Time API](https://worldtimeapi.org/).
 
 ## Getting Started
 
 1. Visit [OpenWeather](https://openweathermap.org/api) and sign up for an API key.
 
-2. Open the `script.js` file in your project.
+2. Visit [World Time API](https://api-ninjas.com/api/worldtime) and sign up for an API key.
 
-3. Locate the `const apiKey = 'your_actual_api_key_here';` line.
+3. Open the `script.js` file in your project.
 
-4. Replace `'your_actual_api_key_here'` with the API key you obtained from OpenWeather.
+4. Locate the relevant lines in the code that require API keys.
 
-5. Save the `script.js` file.
+5. Replace the placeholder values with the API keys you obtained.
 
-6. Open the `index.html` file in your project and ensure it's set up correctly.
+6. Save the `script.js` file.
 
-7. Run the project by opening `index.html` in your preferred browser.
+7. Open the `index.html` file in your project and ensure it's set up correctly.
 
-**Note:** This project requires an OpenWeather API key. Be cautious about exposing your API key in public repositories.
+8. Run the project by opening `index.html` in your preferred browser.
+
+**Note:** This project requires both OpenWeather and World Time API keys. Be cautious about exposing your API keys in public repositories.
 
 ## Contributing
 
 If you'd like to contribute to this project, please open an issue or submit a pull request.
-
 
