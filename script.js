@@ -105,8 +105,15 @@ function fetchWeatherAndTimeData(cityName) {
             } catch (error) {
                 console.warn('Error fetching air quality data:', error);
             }
+            
+            let forecastData = null;
+            try {
+                forecastData = await fetchForecastData(latitude, longitude, weatherApiKey);
+            } catch (error) {
+                console.warn('Error fetching forecast data:', error);
+            }
 
-            processWeatherAndTimeData(weatherData, timeData, airQualityData);
+            processWeatherAndTimeData(weatherData, timeData, airQualityData, forecastData);
         })
         .catch(error => {
             console.error('Error fetching weather data:', error);
@@ -138,7 +145,18 @@ async function fetchAirQualityData(lat, lon, apiKey) {
     return await response.json();
 }
 
-function processWeatherAndTimeData(weatherData, timeData, airQualityData) {
+async function fetchForecastData(lat, lon, apiKey) {
+    const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
+    const response = await fetch(forecastURL);
+
+    if (!response.ok) {
+        throw new Error(`Forecast API error: ${response.status}`);
+    }
+
+    return await response.json();
+}
+
+function processWeatherAndTimeData(weatherData, timeData, airQualityData, forecastData) {
     if (!weatherData) {
         console.error('No weather data available');
         return;
@@ -147,7 +165,7 @@ function processWeatherAndTimeData(weatherData, timeData, airQualityData) {
     currentTimeData = timeData ? { ...timeData } : null;
 
     var coordinates = [weatherData.coord.lat, weatherData.coord.lon];
-    var popupContent = createPopupContent(weatherData, timeData, airQualityData);
+    var popupContent = createPopupContent(weatherData, timeData, airQualityData, forecastData);
 
     var marker = L.marker(coordinates)
         .bindPopup(popupContent, { maxWidth: 400, className: 'custom-popup' });
@@ -157,9 +175,10 @@ function processWeatherAndTimeData(weatherData, timeData, airQualityData) {
     marker.openPopup();
     activePopup = marker;
 
-    // Add event listener to render chart immediately when popup opens
+    // Add event listener to render charts immediately when popup opens
     marker.on('popupopen', function() {
         renderAirQualityChart(airQualityData);
+        renderForecastChart(forecastData);
     });
 
     if (timeUpdateInterval) clearInterval(timeUpdateInterval);
@@ -169,8 +188,9 @@ function processWeatherAndTimeData(weatherData, timeData, airQualityData) {
 
     mymap.setView(coordinates, 10);
     
-    // Render chart immediately instead of using setTimeout
+    // Render charts immediately instead of using setTimeout
     renderAirQualityChart(airQualityData);
+    renderForecastChart(forecastData);
 }
 
 function renderAirQualityChart(airQualityData) {
@@ -222,7 +242,103 @@ function renderAirQualityChart(airQualityData) {
     }
 }
 
-function createPopupContent(weatherData, timeData, airQualityData) {
+function renderForecastChart(forecastData) {
+    if (forecastData?.list) {
+        const ctx = document.getElementById('forecastChart');
+        if (ctx) {
+            // Process forecast data
+            const processedData = processForecastData(forecastData);
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: processedData.labels,
+                    datasets: [
+                        {
+                            label: 'Temperature (°F)',
+                            data: processedData.temperatures,
+                            borderColor: '#FF6384',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            yAxisID: 'y',
+                            tension: 0.1,
+                            fill: false
+                        },
+                        {
+                            label: 'Humidity (%)',
+                            data: processedData.humidity,
+                            borderColor: '#36A2EB',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            yAxisID: 'y1',
+                            tension: 0.1,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date/Time'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Temperature (°F)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Humidity (%)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+}
+
+function processForecastData(forecastData) {
+    const result = {
+        labels: [],
+        temperatures: [],
+        humidity: []
+    };
+    
+    // Take forecast data for every 6 hours (to get 5 day forecast with reasonable data points)
+    const dataPoints = forecastData.list.filter((item, index) => index % 2 === 0);
+    
+    dataPoints.forEach(item => {
+        // Format the date
+        const date = new Date(item.dt * 1000);
+        const formattedDate = `${date.getMonth()+1}/${date.getDate()} ${date.getHours()}:00`;
+        
+        result.labels.push(formattedDate);
+        result.temperatures.push(item.main.temp);
+        result.humidity.push(item.main.humidity);
+    });
+    
+    return result;
+}
+
+function createPopupContent(weatherData, timeData, airQualityData, forecastData) {
     var weather = weatherData.weather[0].main;
     var weatherIcon = weatherData.weather[0].icon;
     var description = weatherData.weather[0].description;
@@ -290,9 +406,22 @@ function createPopupContent(weatherData, timeData, airQualityData) {
             <p>Air quality data unavailable</p>
         `;
     }
+    
+    let forecastSection = '';
+    if (forecastData?.list) {
+        forecastSection = `
+            <h5 class="weather-heading">5-Day Weather Forecast</h5>
+            <canvas id="forecastChart" width="350" height="250"></canvas>
+        `;
+    } else {
+        forecastSection = `
+            <h5 class="weather-heading">5-Day Weather Forecast</h5>
+            <p>Forecast data unavailable</p>
+        `;
+    }
 
     return `
-        <div class="popup-scrollable" style="max-height: 400px; overflow-y: auto;">
+        <div class="popup-scrollable" style="max-height: 500px; overflow-y: auto;">
             <div class="popup-container custom-popup-width">
                 <div class="location-heading">
                     <h3>Data for ${name}, ${country}</h3>
@@ -315,6 +444,8 @@ function createPopupContent(weatherData, timeData, airQualityData) {
                 </div>
                 <br>
                 ${aqiSection}
+                <br>
+                ${forecastSection}
             </div>
         </div>`;
 }
