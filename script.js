@@ -157,61 +157,69 @@ function processWeatherAndTimeData(weatherData, timeData, airQualityData) {
     marker.openPopup();
     activePopup = marker;
 
+    // Add event listener to render chart immediately when popup opens
+    marker.on('popupopen', function() {
+        renderAirQualityChart(airQualityData);
+    });
+
     if (timeUpdateInterval) clearInterval(timeUpdateInterval);
     if (currentTimeData) {
         timeUpdateInterval = setInterval(updatePopupTime, 30000); // every 30 seconds
     }
 
     mymap.setView(coordinates, 10);
+    
+    // Render chart immediately instead of using setTimeout
+    renderAirQualityChart(airQualityData);
+}
 
-    setTimeout(() => {
-        if (airQualityData?.list?.[0]) {
-            const components = airQualityData.list[0].components;
-            const ctx = document.getElementById('aqiChart');
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['PM2.5', 'PM10', 'CO', 'NO₂', 'O₃'],
-                        datasets: [{
-                            label: 'Air Pollutant Concentration (µg/m³)',
-                            data: [
-                                components.pm2_5 || 0.01,
-                                components.pm10 || 0.01,
-                                components.co || 0.01,
-                                components.no2 || 0.01,
-                                components.o3 || 0.01
-                            ],
-                            backgroundColor: [
-                                '#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF'
-                            ]
-                        }]
-                    },
-                    options: {
-                        responsive: false,
-                        scales: {
-                            y: {
-                                type: 'logarithmic',
-                                min: 0.1,
-                                title: {
-                                    display: true,
-                                    text: 'Concentration (µg/m³, log scale)'
-                                }
+function renderAirQualityChart(airQualityData) {
+    if (airQualityData?.list?.[0]) {
+        const components = airQualityData.list[0].components;
+        const ctx = document.getElementById('aqiChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['PM2.5', 'PM10', 'CO', 'NO₂', 'O₃'],
+                    datasets: [{
+                        label: 'Air Pollutant Concentration (µg/m³)',
+                        data: [
+                            components.pm2_5 || 0.01,
+                            components.pm10 || 0.01,
+                            components.co || 0.01,
+                            components.no2 || 0.01,
+                            components.o3 || 0.01
+                        ],
+                        backgroundColor: [
+                            '#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    scales: {
+                        y: {
+                            type: 'logarithmic',
+                            min: 0.1,
+                            title: {
+                                display: true,
+                                text: 'Concentration (µg/m³, log scale)'
                             }
-                        },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: ctx => `${ctx.parsed.y} µg/m³`
-                                }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `${ctx.parsed.y} µg/m³`
                             }
                         }
                     }
-                });
-            }
+                }
+            });
         }
-    }, 300);
+    }
 }
 
 function createPopupContent(weatherData, timeData, airQualityData) {
