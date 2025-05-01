@@ -67,3 +67,20 @@
     max-width: 100px;
     max-height: 100px;
 }
+
+.red-circle-icon {
+    background-color: red;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    z-index: 999999 !important;
+    position: relative;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+#windy {
+    width: 100%;
+    height: 300px;
+}
+
